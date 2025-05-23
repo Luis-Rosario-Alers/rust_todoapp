@@ -1,5 +1,10 @@
 use std::io;
-pub fn read_input() -> String {
+use std::io::Write;
+
+pub fn read_input(console_text: &str) -> String {
+    print!("{}", console_text);
+    io::stdout().flush().unwrap();
+
     let mut input: String = String::new();
     
     io::stdin()
