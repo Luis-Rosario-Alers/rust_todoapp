@@ -28,7 +28,7 @@ fn initialize_lists() -> Result<TodoLists, serde_json::Error> {
         Err(error) => panic!("Error opening file: {:?}", error),
     };
     let reader = BufReader::new(file);
-    
+
     let lists: Result<TodoLists, _> = serde_json::from_reader(reader);
     lists
 }
@@ -42,7 +42,7 @@ fn handle_command(command: &str, todo_lists: &mut TodoLists) {
         "help" => {
             println!("help"); // show help screen
         },
-        "add" => { 
+        "add" => {
             todo_lists.get_active_list().add_item(); // add a new todo item to current list
         },
         "quit" => {
@@ -50,6 +50,9 @@ fn handle_command(command: &str, todo_lists: &mut TodoLists) {
         }
         "switch" => {
             todo_lists.switch_active_list() // switch to another list
+        }
+        "list" => {
+            todo_lists.get_active_list().display_items();
         }
         _ => {
             println!("Unknown command.");

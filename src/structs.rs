@@ -65,12 +65,23 @@ impl TodoList {
     }
 
     pub fn add_item(&mut self) {
-        let title_name = helpers::read_input();
-        let description_name = helpers::read_input();
+        let title_name = helpers::read_input("Title: ");
+        let description_name = helpers::read_input("Description: ");
 
         let todo_item: TodoItem = TodoItem::new_with(title_name, description_name);
 
         println!("Added todo item: {:?}", todo_item);
+    }
+
+    pub fn display_items(&self) {
+        // Items should be displayed like this
+
+        // 1. Do laundry [Status: 🔴]
+        //      I need to do laundry for my mom today.
+
+        for (i, item) in self.items.iter().enumerate() {
+            println!("{}. {} [Status: {}]\n     {}", i+1, item.title, if item.completed { "🟢" } else { "🔴" }, item.description);
+        }
     }
 
     pub fn name(&self) -> &String {
@@ -113,6 +124,7 @@ impl TodoLists {
         } else {
             self.active_index = 0;
         }
+        println!("Switched to list: {}", self.active_index);
     }
 
 }
