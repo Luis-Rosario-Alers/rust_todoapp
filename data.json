@@ -1,0 +1,16 @@
+{
+  "lists": [
+    {
+      "name": "list1",
+      "items": [
+        {
+          "title": "Do chores today.",
+          "description": "I need to do these chores for my mom.",
+          "completed": false,
+          "id": 5
+        }
+      ]
+    }
+  ],
+  "active_index": 0
+}
