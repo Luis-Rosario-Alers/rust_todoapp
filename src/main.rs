@@ -2,7 +2,7 @@ mod structs;
 mod helpers;
 use std::fs::File;
 use std::io;
-use std::io::BufReader;
+use std::io::{BufReader, Write};
 use std::process;
 use crate::structs::{TodoItem, TodoLists};
 
@@ -38,6 +38,7 @@ fn program_start() {
 }
 
 fn handle_command(command: &str, todo_lists: &mut TodoLists) {
+    // TODO: at some point i need to add actual CLI parsing for commands
     match command {
         "help" => {
             println!("help"); // show help screen
@@ -59,6 +60,7 @@ fn handle_command(command: &str, todo_lists: &mut TodoLists) {
         }
     }
 }
+
 
 
 fn show_help() {
