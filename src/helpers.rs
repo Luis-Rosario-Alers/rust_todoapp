@@ -11,5 +11,5 @@ pub fn read_input(console_text: &str) -> String {
         .read_line(&mut input)
         .expect("Failed to read line");
     
-    input
+    input.trim().to_string()
 }
