@@ -1,6 +1,9 @@
+use std::fs::File;
+use std::io;
+use crate::helpers;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
-use crate::{helpers, structs};
+use std::io::Write;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TodoItem {
@@ -71,6 +74,8 @@ impl TodoList {
         let todo_item: TodoItem = TodoItem::new_with(title_name, description_name);
 
         println!("Added todo item: {:?}", todo_item);
+
+        self.items.push(todo_item);
     }
 
     pub fn display_items(&self) {
@@ -115,6 +120,7 @@ impl TodoLists {
     }
 
     pub fn get_active_list(&mut self) -> &mut TodoList {
+        self.save_state();
         &mut self.lists[self.active_index]
     }
 
@@ -126,5 +132,19 @@ impl TodoLists {
         }
         println!("Switched to list: {}", self.active_index);
     }
+    fn save_state(&self) {
+        let mut file = match File::create("data.json") {
+            Ok(file) => file,
+            Err(error) => panic!("Error opening file: {:?}", error),
+        };
+        let serialized_json = serde_json::to_string(self);
+        match serialized_json {
+            Ok(json) => {
+                file.write_all(json.as_bytes()).expect("Failed to write to file");
+            },
+            Err(error) => panic!("Error serializing json: {:?}", error),
+        }
+    }
+
 
 }
