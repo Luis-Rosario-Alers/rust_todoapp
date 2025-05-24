@@ -27,13 +27,18 @@ pub enum Commands {
         #[arg(short = 'v', long = "verbose")]
         completed: bool,
     },
-    /// Complete an item by its ID
+    /// Complete an item by its index (starting from 1)
     Complete {
-        id: i32,
+        index: usize,
     },
-    /// Remove an item by its ID  
+    /// Remove an item by its index (starting from 1) 
     Remove {
-        id: i32,
+        index: usize,
+    },
+    /// Create a new todo list
+    Create {
+        #[arg(short = 'n', long = "name")]
+        name: String,
     },
     /// Switch lists
     Switch,
@@ -135,6 +140,26 @@ impl TodoList {
             self.display_items_verbose();
         } else {
             self.display_items_compact();
+        }
+    }
+
+    pub fn complete_item(&mut self, index: usize) {
+        if index > 0 && index <= self.items.len() {
+            let item = &mut self.items[index - 1];
+            item.completed = true;
+            println!("Completed item: {}", item.title);
+        } else {
+            println!("Invalid index: {}", index);
+        }
+    }
+
+    pub fn remove_item(&mut self, index: usize) {
+        if index > 0 && index <= self.items.len() {
+            let item = &self.items[index - 1];
+            println!("Removing item: {}", item.title);
+            self.items.remove(index - 1);
+        } else {
+            println!("Invalid index: {}", index);
         }
     }
 

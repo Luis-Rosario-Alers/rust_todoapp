@@ -81,18 +81,14 @@ fn handle_command(command: Commands, todo_lists: &mut TodoLists) {
         Commands::List { completed } => {
             todo_lists.get_active_list().display_items(completed);
         }
+        Commands::Complete { index } => {
+            todo_lists.get_active_list().complete_item(index);
+        }
+        Commands::Remove { index } => {
+            todo_lists.get_active_list().remove_item(index);
+        }
         _ => {
             println!("Unknown command.");
         }
     }
-}
-
-
-
-fn show_help() {
-    println!("Available commands:");
-    println!("  help - Show this help message");
-    println!("  add - Add a new todo item");
-    println!("  quit - Quit the program");
-    println!("  switch - Switch to another list");
 }
