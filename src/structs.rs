@@ -2,7 +2,44 @@ use std::fs::File;
 use crate::helpers;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
+use clap::{Parser, Subcommand};
 use std::io::Write;
+
+#[derive(Parser, Debug)]
+#[command(name = "")]
+pub struct TodoCommand {
+    #[command(subcommand)]
+    pub command: Commands,
+}
+
+#[derive(Subcommand, Debug)]
+pub enum Commands {
+    /// Add a new todo item
+    Add {
+        #[arg(short = 't', long = "title")]
+        title: String,
+        #[arg(short = 'd', long = "description")]
+        description: String,
+    },
+    /// List all items
+    List {
+        /// Show completed items
+        #[arg(short = 'v', long = "verbose")]
+        completed: bool,
+    },
+    /// Complete an item by its ID
+    Complete {
+        id: i32,
+    },
+    /// Remove an item by its ID  
+    Remove {
+        id: i32,
+    },
+    /// Switch lists
+    Switch,
+    /// Quit the program
+    Quit,
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TodoItem {
@@ -66,18 +103,23 @@ impl TodoList {
         }
     }
 
-    pub fn add_item(&mut self) {
-        let title_name = helpers::read_input("Title: ");
-        let description_name = helpers::read_input("Description: ");
-
-        let todo_item: TodoItem = TodoItem::new_with(title_name, description_name);
+    pub fn add_item(&mut self, title: String, description: String) {
+        let todo_item: TodoItem = TodoItem::new_with(title, description);
 
         println!("Added todo item: {:?}", todo_item);
 
         self.items.push(todo_item);
     }
 
-    pub fn display_items(&self) {
+    pub fn display_items_compact(&self) {
+        // Items should be displayed like this
+        // 1. Do laundry [Status: 🔴]
+        for (i, item) in self.items.iter().enumerate() {
+            println!("{}. {} [Status: {}]", i+1, item.title, if item.completed { "🟢" } else { "🔴" });
+        }
+    }
+
+    pub fn display_items_verbose(&self) {
         // Items should be displayed like this
 
         // 1. Do laundry [Status: 🔴]
@@ -85,6 +127,14 @@ impl TodoList {
 
         for (i, item) in self.items.iter().enumerate() {
             println!("{}. {} [Status: {}]\n     {}", i+1, item.title, if item.completed { "🟢" } else { "🔴" }, item.description);
+        }
+    }
+
+    pub fn display_items(&self, completed: bool) {
+        if completed {
+            self.display_items_verbose();
+        } else {
+            self.display_items_compact();
         }
     }
 
@@ -144,6 +194,4 @@ impl TodoLists {
             Err(error) => panic!("Error serializing json: {:?}", error),
         }
     }
-
-
 }
