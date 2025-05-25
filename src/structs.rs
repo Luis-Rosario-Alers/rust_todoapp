@@ -45,13 +45,28 @@ pub enum Commands {
     },
     /// Switch lists
     Switch,
-    /// Change the name of the current list or item depending on flags
-    Change {
-        #[arg(short = 'n', long = "name")]
+    /// Rename the current list
+    RenameList {
+        /// New name for the list
         name: String,
-        #[arg(short = 'i', long = "item")]
-        item: Option<usize>,
     },
+    
+    /// Rename a todo item
+    RenameItem {
+        /// Item index (starting from 1)
+        index: usize,
+        /// New title for the item
+        title: String,
+    },
+    
+    /// Change an item's description
+    EditItem {
+        /// Item index (starting from 1)
+        index: usize,
+        /// New description for the item
+        description: String,
+    },
+    
     /// Quit the program
     Quit,
 }
@@ -190,7 +205,7 @@ impl TodoList {
         self.name = name;
     }
 
-    pub fn change_item_name(&mut self, name: String, index: usize) {
+    pub fn change_item_name(&mut self, index: usize, name: String) {
         if index > 0 && index <= self.items.len() {
             let item= &mut self.items[index - 1];
             item.title = name;

@@ -96,12 +96,15 @@ fn handle_command(command: Commands, todo_lists: &mut TodoLists) {
         },
         Commands::Create { name } => {
             todo_lists.create_new_list(name);
+        },
+        Commands::EditItem { index, description} => {
+            todo_lists.get_active_list().change_item_description(index, description);
+        },
+        Commands::RenameItem { index, title } => {
+            todo_lists.get_active_list().change_item_name(index, title);
         }
-        Commands::Change { name, item} => {
-            match item {
-                Some(item) => todo_lists.get_active_list().change_item_name(name, item),
-                None => todo_lists.get_active_list().change_list_name(name),
-            }
+        Commands::RenameList { name } => {
+            todo_lists.get_active_list().change_list_name(name);
         }
     }
 }
