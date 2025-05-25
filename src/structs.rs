@@ -40,7 +40,6 @@ pub enum Commands {
     /// Create a new todo list
     Create {
         /// Name of new todo list
-        #[arg(short = 'n', long = "name")]
         name: String,
     },
     /// Switch lists
