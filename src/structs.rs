@@ -1,5 +1,4 @@
 use std::fs::File;
-use crate::helpers;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 use clap::{Parser, Subcommand};
@@ -101,6 +100,13 @@ impl TodoList {
         }
     }
 
+    pub fn new_with_name(name: String) -> Self {
+        Self {
+            name,
+            items: Vec::new(),
+        }
+    }
+
     pub fn new_with(name: String, items: Vec<TodoItem>) -> Self {
         Self {
             name,
@@ -136,6 +142,11 @@ impl TodoList {
     }
 
     pub fn display_items(&self, completed: bool) {
+        if self.items.is_empty() {
+            println!("No items in the list.");
+            return;
+        }
+
         if completed {
             self.display_items_verbose();
         } else {
@@ -181,7 +192,7 @@ pub struct TodoLists {
 impl TodoLists {
     pub fn new() -> Self {
         Self {
-            lists: Vec::new(),
+            lists: vec![TodoList::new()],
             active_index: 0,
         }
     }
@@ -206,6 +217,7 @@ impl TodoLists {
         }
         println!("Switched to list: {}", self.active_index);
     }
+
     fn save_state(&self) {
         let mut file = match File::create("data.json") {
             Ok(file) => file,
@@ -218,5 +230,12 @@ impl TodoLists {
             },
             Err(error) => panic!("Error serializing json: {:?}", error),
         }
+    }
+
+    pub fn create_new_list(&mut self, name: String) {
+        let new_list = TodoList::new_with_name(name);
+        println!("Created new list: {}", new_list.name());
+        self.lists.push(new_list);
+        self.active_index = self.lists.len() - 1; 
     }
 }

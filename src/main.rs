@@ -1,5 +1,4 @@
 mod structs;
-mod helpers;
 
 use std::fs::File;
 use std::io;
@@ -14,7 +13,7 @@ fn main() {
     program_start();
     let mut todo_lists = initialize_lists().unwrap();
     loop {
-        print!("todo> ");
+        print!("todo/{}> ", todo_lists.get_active_list().name());
         io::stdout().flush().unwrap();
         let mut command: String = String::new();
         
@@ -67,28 +66,27 @@ fn program_start() {
 }
 
 fn handle_command(command: Commands, todo_lists: &mut TodoLists) {
-    // TODO: at some point i need to add actual CLI parsing for commands
     match command {
         Commands::Add { title, description } => {
-            todo_lists.get_active_list().add_item(title, description); // add a new todo item to current list
+            todo_lists.get_active_list().add_item(title, description);
         },
         Commands::Quit => {
-            process::exit(0); // quit program
+            process::exit(0); 
         },
         Commands::Switch => {
-            todo_lists.switch_active_list(); // switch to another list
+            todo_lists.switch_active_list(); 
         },
         Commands::List { completed } => {
             todo_lists.get_active_list().display_items(completed);
-        }
+        },
         Commands::Complete { index } => {
             todo_lists.get_active_list().complete_item(index);
-        }
+        },
         Commands::Remove { index } => {
             todo_lists.get_active_list().remove_item(index);
-        }
-        _ => {
-            println!("Unknown command.");
+        },
+        Commands::Create { name } => {
+            todo_lists.create_new_list(name);
         }
     }
 }
