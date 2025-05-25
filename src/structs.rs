@@ -15,10 +15,11 @@ pub struct TodoCommand {
 pub enum Commands {
     /// Add a new todo item
     Add {
-        #[arg(short = 't', long = "title")]
+        /// Title of the todo item
         title: String,
+        /// Description of the todo item (optional)
         #[arg(short = 'd', long = "description")]
-        description: String,
+        description: Option<String>,
     },
     /// List all items
     List {

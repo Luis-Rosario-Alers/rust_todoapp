@@ -74,7 +74,10 @@ fn program_start() {
 fn handle_command(command: Commands, todo_lists: &mut TodoLists) {
     match command {
         Commands::Add { title, description } => {
-            todo_lists.get_active_list().add_item(title, description);
+            match description {
+                Some(desc) => todo_lists.get_active_list().add_item(title, desc),
+                None => todo_lists.get_active_list().add_item(title, "".to_string()),
+            }
         },
         Commands::Quit => {
             process::exit(0); 
