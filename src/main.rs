@@ -5,8 +5,7 @@ use std::io;
 use std::io::{BufReader, Write};
 use std::process;
 use crate::structs::{TodoLists, TodoCommand};
-use clap::{Command, Parser};
-use shlex::split;
+use clap::{Parser};
 use structs::Commands;
 
 fn main() {
