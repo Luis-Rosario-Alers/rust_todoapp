@@ -10,7 +10,14 @@ use structs::Commands;
 
 fn main() {
     program_start();
-    let mut todo_lists = initialize_lists().unwrap();
+    let mut todo_lists = match initialize_lists() {
+        Ok(lists) => lists,
+        Err(e) => {
+            eprintln!("Error initializing todo lists: {}", e);
+            TodoLists::new()
+        }
+    };
+
     loop {
         print!("todo/{}> ", todo_lists.get_active_list().name());
         io::stdout().flush().unwrap();
