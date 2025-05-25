@@ -29,14 +29,17 @@ pub enum Commands {
     },
     /// Complete an item by its index (starting from 1)
     Complete {
+        /// Item index (starting from 1)
         index: usize,
     },
     /// Remove an item by its index (starting from 1) 
-    Remove {
+    Remove { 
+        /// Item index (starting from 1)
         index: usize,
     },
     /// Create a new todo list
     Create {
+        /// Name of new todo list
         #[arg(short = 'n', long = "name")]
         name: String,
     },
