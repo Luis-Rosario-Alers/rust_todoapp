@@ -286,6 +286,7 @@ impl TodoLists {
         let new_list = TodoList::new_with_name(name);
         println!("Created new list: {}", new_list.name());
         self.lists.push(new_list);
-        self.active_index = self.lists.len() - 1; 
+        self.active_index = self.lists.len() - 1;
+        self.save_state();
     }
 }
