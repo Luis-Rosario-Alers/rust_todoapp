@@ -87,5 +87,11 @@ fn handle_command(command: Commands, todo_lists: &mut TodoLists) {
         Commands::Create { name } => {
             todo_lists.create_new_list(name);
         }
+        Commands::Change { name, item} => {
+            match item {
+                Some(item) => todo_lists.get_active_list().change_item_name(name, item),
+                None => todo_lists.get_active_list().change_list_name(name),
+            }
+        }
     }
 }

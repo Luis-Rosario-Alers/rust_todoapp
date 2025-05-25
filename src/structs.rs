@@ -41,6 +41,13 @@ pub enum Commands {
     },
     /// Switch lists
     Switch,
+    /// Change the name of the current list or item depending on flags
+    Change {
+        #[arg(short = 'n', long = "name")]
+        name: String,
+        #[arg(short = 'i', long = "item")]
+        item: Option<usize>,
+    },
     /// Quit the program
     Quit,
 }
@@ -173,6 +180,31 @@ impl TodoList {
             println!("Invalid index: {}", index);
         }
     }
+
+    pub fn change_list_name(&mut self, name: String) {
+        println!("Changed list name from '{}' to '{}'", self.name, name);
+        self.name = name;
+    }
+
+    pub fn change_item_name(&mut self, name: String, index: usize) {
+        if index > 0 && index <= self.items.len() {
+            let item= &mut self.items[index - 1];
+            item.title = name;
+        } else {
+            println!("Invalid index: {}", index);
+        }
+    }
+
+    pub fn change_item_description(&mut self, index: usize, description: String) {
+        if index > 0 && index <= self.items.len() {
+            let item = &mut self.items[index - 1];
+            item.description = description;
+        } else {
+            println!("Invalid index: {}", index);
+        }  
+    }
+
+
 
     pub fn name(&self) -> &String {
         &self.name
