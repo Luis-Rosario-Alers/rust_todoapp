@@ -32,8 +32,10 @@ pub enum Commands {
         /// Item index (starting from 1)
         index: usize,
     },
-    /// Remove an item by its index (starting from 1) 
-    Remove { 
+    /// Remove current list 
+    RemoveList,
+    /// Remove list item
+    Remove {
         /// Item index (starting from 1)
         index: usize,
     },
@@ -288,5 +290,18 @@ impl TodoLists {
         self.lists.push(new_list);
         self.active_index = self.lists.len() - 1;
         self.save_state();
+    }
+    
+    pub fn remove_list(&mut self) {
+        match self.lists.len() {
+            1 => println!("There is only one list, cannot remove it."),
+            _ => println!("Removed list: {}", self.lists[self.active_index].name()),
+        }
+        
+        if self.lists.len() > 1 {
+            self.lists.remove(self.active_index);
+            if self.active_index > 0 { self.active_index -= 1 } else { self.active_index = 0 };
+            self.save_state();
+        }
     }
 }

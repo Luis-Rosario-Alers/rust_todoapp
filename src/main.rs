@@ -91,9 +91,12 @@ fn handle_command(command: Commands, todo_lists: &mut TodoLists) {
         Commands::Complete { index } => {
             todo_lists.get_active_list().complete_item(index);
         },
+        Commands::RemoveList => {
+            todo_lists.remove_list();
+        },
         Commands::Remove { index } => {
             todo_lists.get_active_list().remove_item(index);
-        },
+        }
         Commands::Create { name } => {
             todo_lists.create_new_list(name);
         },
